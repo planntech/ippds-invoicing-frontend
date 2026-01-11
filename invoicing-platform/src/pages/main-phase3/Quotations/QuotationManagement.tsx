@@ -26,12 +26,12 @@ import { Badge } from '@/components/ui/badge';
 
 // Import all modals
 import QuotationFormModal from './QuotationFormModal';
-import QuotationPreviewModal from './Quotationpreviewmodal';
+import QuotationPreviewModal from './QuotationPreviewModal';
 import ConvertToInvoiceModal from './ConvertToInvoiceModal';
-import MilestoneInvoiceModal from './Milestoneinvoicemodal';
-import DigitalSignatureModal from './Digitalsignaturemodal';
+import MilestoneInvoiceModal from './MilestoneInvoiceModal';
+import DigitalSignatureModal from './DigitalSignatureModal'
 import ApprovalWorkflowModal from './ApprovalWorkflowModal';
-import VersionHistoryModal from './Versionhistorymodal';
+import VersionHistoryModal from './VersionHistoryModal'
 
 
 
