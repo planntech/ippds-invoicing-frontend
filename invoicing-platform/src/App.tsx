@@ -1,3 +1,4 @@
+// src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
@@ -8,6 +9,10 @@ import DashboardPage from './pages/main-phase1/DashboardPage';
 import CustomerPaymentPage from './pages/main-phase2.2/PaymentGateway/CustomerPaymentPage';
 import PaymentExpiredPage from './pages/main-phase2.2/PaymentGateway/PaymentExpiredPage';
 import PaymentAlreadyPaidPage from './pages/main-phase2.2/PaymentGateway/PaymentAlreadyPaidPage';
+
+// Admin Pages
+import AdminLoginPage from './pages/ipps-admin/AdminLoginPage';
+import AdminDashboardPage from './pages/ipps-admin/AdminDashboardPage';
 
 function App() {
   return (
@@ -29,6 +34,10 @@ function App() {
         <Route path="/pay/xyz789ghi012" element={<CustomerPaymentPage />} />
         <Route path="/pay/expired" element={<PaymentExpiredPage />} />
         <Route path="/pay/completed" element={<PaymentAlreadyPaidPage />} />
+        
+        {/* Admin Routes - Single entry point */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
         
         {/* Catch all - redirect to login */}
         <Route path="*" element={<Navigate to="/login" replace />} />

@@ -32,6 +32,7 @@ import ProductManagement from '../main-phase2/ProductManagement';
 import QuotationManagement from '../main-phase2.2/Quotations/QuotationManagement';
 import InvoiceManagement from '../main-phase2.2/Invoices/InvoiceManagement';
 import ReceiptManagement from '../main-phase2.2/Receipts/ReceiptManagement';
+import ReportPage from '../main-phase2.2/Reports/ReportPage';
 
 // ========================
 // TYPES
@@ -334,6 +335,8 @@ export default function DashboardPage({ children }: DashboardPageProps) {
         return <QuotationManagement />;
       case 'payments':
         return <ReceiptManagement />;
+      case 'reports':
+        return <ReportPage />;
       case 'settings':
         return <UserManagement />;
       case 'subscription':

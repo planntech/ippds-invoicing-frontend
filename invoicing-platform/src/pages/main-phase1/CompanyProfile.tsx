@@ -1,3 +1,4 @@
+// src/pages/main-phase1/CompanyProfile.tsx
 import { useState } from 'react';
 import {
   Building2,
@@ -17,6 +18,8 @@ import {
   Edit,
   Power,
   Users,
+  CreditCard,
+  QrCode,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +32,50 @@ export default function CompanyProfile() {
   const [accountType, setAccountType] = useState<'individual' | 'business'>('business');
   const [addresses, setAddresses] = useState([
     { id: 1, type: 'head_office', address: '123 Business Street', city: 'Bangkok', country: 'Thailand', postalCode: '10110' },
+  ]);
+
+  // Payment Rails Configuration
+  const [paymentRails, setPaymentRails] = useState([
+    {
+      id: 'thaiqr',
+      name: 'Thai QR (PromptPay)',
+      icon: '🇹🇭',
+      enabled: true,
+      description: 'Accept payments via Thai QR code',
+      fee: '1.5% + ฿4',
+    },
+    {
+      id: 'sbpqr',
+      name: 'SBP QR (Russia)',
+      icon: '🇷🇺',
+      enabled: true,
+      description: 'Accept payments via Russian SBP QR',
+      fee: '2.0% + ฿10',
+    },
+    {
+      id: 'mircard',
+      name: 'MIR Card',
+      icon: '💳',
+      enabled: false,
+      description: 'Russian payment card system',
+      fee: '2.5% + ฿15',
+    },
+    {
+      id: 'thaicreditcard',
+      name: 'Thai Credit Card',
+      icon: '💳',
+      enabled: true,
+      description: 'Visa, Mastercard, JCB (Thai issued)',
+      fee: '2.5% + ฿10',
+    },
+    {
+      id: 'internationalcard',
+      name: 'International Credit Card',
+      icon: '🌍',
+      enabled: false,
+      description: 'International Visa, Mastercard',
+      fee: '3.5% + ฿15',
+    },
   ]);
 
   // Branch Management Data
@@ -106,6 +153,7 @@ export default function CompanyProfile() {
 
   const tabs = [
     { id: 'company', label: 'Company Profile', icon: Building2 },
+    { id: 'payment-rails', label: 'Payment Methods', icon: CreditCard },
     { id: 'branches', label: 'Branch Management', icon: Building2 },
     { id: 'branding', label: 'Branding', icon: Image },
     { id: 'banking', label: 'Banking', icon: FileText },
@@ -125,6 +173,12 @@ export default function CompanyProfile() {
 
   const removeAddress = (id: number) => {
     setAddresses(addresses.filter(addr => addr.id !== id));
+  };
+
+  const togglePaymentRail = (id: string) => {
+    setPaymentRails(paymentRails.map(rail => 
+      rail.id === id ? { ...rail, enabled: !rail.enabled } : rail
+    ));
   };
 
   return (
@@ -452,6 +506,141 @@ export default function CompanyProfile() {
         </div>
       )}
 
+      {activeTab === 'payment-rails' && (
+        <div className="space-y-6">
+          {/* Info Banner */}
+          <Card className="border border-blue-200 bg-blue-50">
+            <CardContent className="p-5">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">Payment Method Configuration</h4>
+                  <p className="text-sm text-gray-700">
+                    Enable or disable payment methods for your business. Fees are configured by the admin and may vary based on your subscription plan. Only enabled payment methods will be available at checkout for your customers.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Payment Rails Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {paymentRails.map((rail) => (
+              <Card
+                key={rail.id}
+                className={`border-2 transition-all ${
+                  rail.enabled
+                    ? 'border-[#2f2d77] bg-[#2f2d77]/5'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-3xl">{rail.icon}</div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 mb-1">{rail.name}</h3>
+                        <p className="text-sm text-gray-600">{rail.description}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => togglePaymentRail(rail.id)}
+                      className={`w-12 h-6 rounded-full transition-colors relative flex-shrink-0 ${
+                        rail.enabled ? 'bg-[#2f2d77]' : 'bg-gray-300'
+                      }`}
+                    >
+                      <div
+                        className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${
+                          rail.enabled ? 'right-0.5' : 'left-0.5'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Transaction Fee:</span>
+                      <span className="font-medium text-gray-900">{rail.fee}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <Badge
+                      variant="outline"
+                      className={`w-full justify-center ${
+                        rail.enabled
+                          ? 'bg-green-50 text-green-700 border-green-200'
+                          : 'bg-gray-50 text-gray-600 border-gray-300'
+                      }`}
+                    >
+                      {rail.enabled ? (
+                        <>
+                          <CheckCircle2 className="h-3 w-3 mr-1" />
+                          Enabled
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-3 w-3 mr-1" />
+                          Disabled
+                        </>
+                      )}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Active Payment Methods Summary */}
+          <Card className="border border-gray-200">
+            <CardHeader className="border-b border-gray-200 bg-gray-50 py-4">
+              <CardTitle className="text-base font-semibold text-gray-900">
+                Active Payment Methods Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Enabled Methods</p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {paymentRails.filter((r) => r.enabled).length}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Total Methods</p>
+                  <p className="text-2xl font-semibold text-gray-900">{paymentRails.length}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Status</p>
+                  <Badge
+                    variant="outline"
+                    className={`${
+                      paymentRails.filter((r) => r.enabled).length > 0
+                        ? 'bg-green-50 text-green-700 border-green-200'
+                        : 'bg-red-50 text-red-700 border-red-200'
+                    }`}
+                  >
+                    {paymentRails.filter((r) => r.enabled).length > 0
+                      ? 'Ready to Accept Payments'
+                      : 'No Payment Methods Enabled'}
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Save Button */}
+          <div className="flex justify-end">
+            <Button className="bg-[#2f2d77] hover:bg-[#252351] text-white px-6 h-10">
+              <Save className="h-4 w-4 mr-2" />
+              Save Payment Settings
+            </Button>
+          </div>
+        </div>
+      )}
+
       {activeTab === 'branches' && (
         <div className="space-y-6">
           {/* Branch Directory */}
@@ -706,9 +895,7 @@ export default function CompanyProfile() {
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Branch-Specific Bank Accounts</h4>
                   <p className="text-sm text-gray-700">
-                    {accountType === 'business'
-                      ? 'Each branch can have its own bank account for localized payment processing and reconciliation. This helps with branch-level accounting and cash flow management.'
-                      : 'As an individual account, you can configure one primary bank account for all transactions.'}
+                    Each branch can have its own bank account for localized payment processing and reconciliation. This helps with branch-level accounting and cash flow management.
                   </p>
                 </div>
               </div>
