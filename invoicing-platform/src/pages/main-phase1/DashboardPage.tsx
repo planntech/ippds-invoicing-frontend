@@ -29,8 +29,9 @@ import UserManagement from './UserManagement';
 import SubscriptionManagement from './SubscriptionManagement';
 import CustomerManagement from '../main-phase2/CustomerManagement';
 import ProductManagement from '../main-phase2/ProductManagement';
-import QuotationManagement from '../main-phase3/Quotations/QuotationManagement';
-import InvoiceManagement from '../main-phase3/Invoices/InvoiceManagement';
+import QuotationManagement from '../main-phase2.2/Quotations/QuotationManagement';
+import InvoiceManagement from '../main-phase2.2/Invoices/InvoiceManagement';
+import ReceiptManagement from '../main-phase2.2/Receipts/ReceiptManagement';
 
 // ========================
 // TYPES
@@ -73,7 +74,7 @@ function Sidebar({ isOpen, onClose, activeMenu, onMenuChange, isCollapsed, onTog
     { id: 'products', name: 'Products', icon: Package },
     { id: 'payments', name: 'Payments', icon: CreditCard },
     { id: 'reports', name: 'Reports', icon: BarChart3 },
-    { id: 'settings', name: 'Settings', icon: Settings },
+    { id: 'settings', name: 'User Settings', icon: Settings },
   ];
 
   const bottomMenuItems: MenuItem[] = [
@@ -331,6 +332,8 @@ export default function DashboardPage({ children }: DashboardPageProps) {
         return <ProductManagement />;
       case 'quotations':
         return <QuotationManagement />;
+      case 'payments':
+        return <ReceiptManagement />;
       case 'settings':
         return <UserManagement />;
       case 'subscription':

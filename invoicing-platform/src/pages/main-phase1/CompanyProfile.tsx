@@ -27,8 +27,6 @@ import { Badge } from '@/components/ui/badge';
 export default function CompanyProfile() {
   const [activeTab, setActiveTab] = useState('company');
   const [accountType, setAccountType] = useState<'individual' | 'business'>('business');
-  const [wantsVirtualAccount, setWantsVirtualAccount] = useState(false);
-  const [corporateEmailVerified, setCorporateEmailVerified] = useState(false);
   const [addresses, setAddresses] = useState([
     { id: 1, type: 'head_office', address: '123 Business Street', city: 'Bangkok', country: 'Thailand', postalCode: '10110' },
   ]);
@@ -106,109 +104,12 @@ export default function CompanyProfile() {
     },
   ]);
 
-  // KYC Status
-  const kycStatus = {
-    verificationType: 'kyb', // kyc (individual), kyb (business), kym (merchant)
-    status: 'pending', // pending, approved, rejected, under_review
-    completeness: 75,
-    lastUpdated: '2026-01-05',
-    hasVirtualAccount: false,
-    corporateEmailVerified: false,
-    documents: [
-      { id: 1, name: 'Business Registration Certificate', status: 'approved', uploadedDate: '2026-01-02', size: '2.4 MB', required: 'business' },
-      { id: 2, name: 'Tax Identification Certificate', status: 'approved', uploadedDate: '2026-01-02', size: '1.8 MB', required: 'both' },
-      { id: 3, name: 'Bank Account Statement', status: 'under_review', uploadedDate: '2026-01-05', size: '3.2 MB', required: 'both' },
-      { id: 4, name: 'Director ID Card', status: 'pending', uploadedDate: null, size: null, required: 'business' },
-      { id: 5, name: 'Company Articles of Association', status: 'rejected', uploadedDate: '2026-01-03', size: '5.1 MB', rejectionReason: 'Document is expired. Please upload a recent version.', required: 'business' },
-      { id: 6, name: 'Individual ID Card / Passport', status: 'approved', uploadedDate: '2026-01-02', size: '1.2 MB', required: 'individual' },
-      { id: 7, name: 'Proof of Address (Utility Bill)', status: 'pending', uploadedDate: null, size: null, required: 'individual' },
-      { id: 8, name: 'Merchant Agreement', status: 'pending', uploadedDate: null, size: null, required: 'merchant' },
-      { id: 9, name: 'Business License', status: 'pending', uploadedDate: null, size: null, required: 'merchant' },
-    ]
-  };
-
   const tabs = [
     { id: 'company', label: 'Company Profile', icon: Building2 },
     { id: 'branches', label: 'Branch Management', icon: Building2 },
     { id: 'branding', label: 'Branding', icon: Image },
     { id: 'banking', label: 'Banking', icon: FileText },
-    { id: 'kyc', label: 'KYC Documents', icon: FileText, badge: kycStatus.documents.filter(d => d.status === 'pending' || d.status === 'rejected').length },
   ];
-
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return {
-          label: 'Approved',
-          className: 'bg-green-50 text-green-700 border-green-200',
-          icon: CheckCircle2,
-          iconColor: 'text-green-600',
-        };
-      case 'pending':
-        return {
-          label: 'Pending Upload',
-          className: 'bg-gray-50 text-gray-600 border-gray-300',
-          icon: Clock,
-          iconColor: 'text-gray-500',
-        };
-      case 'under_review':
-        return {
-          label: 'Under Review',
-          className: 'bg-blue-50 text-blue-700 border-blue-200',
-          icon: Clock,
-          iconColor: 'text-blue-600',
-        };
-      case 'rejected':
-        return {
-          label: 'Rejected',
-          className: 'bg-red-50 text-red-600 border-red-200',
-          icon: XCircle,
-          iconColor: 'text-red-500',
-        };
-      default:
-        return {
-          label: status,
-          className: 'bg-gray-50 text-gray-600 border-gray-300',
-          icon: AlertCircle,
-          iconColor: 'text-gray-500',
-        };
-    }
-  };
-
-  const getKYCStatusConfig = (status: string) => {
-    switch (status) {
-      case 'approved':
-        return {
-          label: 'KYC Approved',
-          badgeClass: 'bg-green-50 text-green-700 border-green-200',
-          barClass: 'bg-green-600',
-        };
-      case 'pending':
-        return {
-          label: 'KYC Pending',
-          badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
-          barClass: 'bg-amber-500',
-        };
-      case 'under_review':
-        return {
-          label: 'Under Review',
-          badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
-          barClass: 'bg-blue-600',
-        };
-      case 'rejected':
-        return {
-          label: 'KYC Rejected',
-          badgeClass: 'bg-red-50 text-red-600 border-red-200',
-          barClass: 'bg-red-600',
-        };
-      default:
-        return {
-          label: 'Unknown',
-          badgeClass: 'bg-gray-50 text-gray-600 border-gray-300',
-          barClass: 'bg-gray-400',
-        };
-    }
-  };
 
   const addAddress = () => {
     const newAddress = {
@@ -226,73 +127,19 @@ export default function CompanyProfile() {
     setAddresses(addresses.filter(addr => addr.id !== id));
   };
 
-  const kycStatusConfig = getKYCStatusConfig(kycStatus.status);
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
-            Company Profile
+            Company Settings
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Manage your company information and KYC verification
+            Manage your company information and preferences
           </p>
         </div>
       </div>
-
-      {/* KYC Status Banner */}
-      <Card className="border border-gray-200">
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <Building2 className="h-6 w-6 text-gray-600" />
-              </div>
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <h3 className="text-base font-semibold text-gray-900">KYC Verification Status</h3>
-                  <Badge variant="outline" className={`${kycStatusConfig.badgeClass} text-xs`}>
-                    {kycStatusConfig.label}
-                  </Badge>
-                </div>
-                <p className="text-sm text-gray-600 mb-3">
-                  Complete your KYC verification to unlock all payment features
-                </p>
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500">Completeness:</span>
-                    <span className="font-medium text-gray-900">{kycStatus.completeness}%</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500">Last Updated:</span>
-                    <span className="font-medium text-gray-900">{kycStatus.lastUpdated}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Button className="bg-[#2f2d77] hover:bg-[#252351] text-white">
-                Complete KYC
-              </Button>
-              <Button variant="outline" className="border-gray-300 hover:bg-gray-50">
-                View Guidelines
-              </Button>
-            </div>
-          </div>
-          
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="w-full h-2 bg-gray-100 rounded overflow-hidden">
-              <div 
-                className={`h-full ${kycStatusConfig.barClass} transition-all duration-500`}
-                style={{ width: `${kycStatus.completeness}%` }}
-              ></div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Tabs */}
       <div className="border-b border-gray-200">
@@ -313,11 +160,6 @@ export default function CompanyProfile() {
               >
                 <Icon className="h-4 w-4" />
                 {tab.label}
-                {tab.badge && tab.badge > 0 && (
-                  <Badge className="bg-red-500 text-white border-0 h-5 px-1.5 text-xs">
-                    {tab.badge}
-                  </Badge>
-                )}
               </button>
             );
           })}
@@ -327,183 +169,6 @@ export default function CompanyProfile() {
       {/* Tab Content */}
       {activeTab === 'company' && (
         <div className="space-y-6">
-          {/* Account Type Selection */}
-          <Card className="border border-gray-200">
-            <CardHeader className="border-b border-gray-200 bg-gray-50 py-4">
-              <CardTitle className="text-base font-semibold text-gray-900">Account Type & Verification</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-6">
-              {/* Account Type */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium text-gray-700">
-                  Account Type <span className="text-red-500">*</span>
-                </Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <button
-                    onClick={() => {
-                      setAccountType('individual');
-                      setWantsVirtualAccount(false);
-                    }}
-                    className={`p-5 border-2 transition-all text-left ${
-                      accountType === 'individual'
-                        ? 'border-[#2f2d77] bg-[#2f2d77]/5'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        accountType === 'individual' ? 'border-[#2f2d77]' : 'border-gray-300'
-                      }`}>
-                        {accountType === 'individual' && (
-                          <div className="w-3 h-3 bg-[#2f2d77] rounded-full"></div>
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-1">Individual</h4>
-                        <p className="text-sm text-gray-600">
-                          Personal account for freelancers or sole proprietors
-                        </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-300 text-xs">
-                            KYC Required
-                          </Badge>
-                          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-xs">
-                            No Virtual Account
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setAccountType('business')}
-                    className={`p-5 border-2 transition-all text-left ${
-                      accountType === 'business'
-                        ? 'border-[#2f2d77] bg-[#2f2d77]/5'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className={`w-5 h-5 border-2 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        accountType === 'business' ? 'border-[#2f2d77]' : 'border-gray-300'
-                      }`}>
-                        {accountType === 'business' && (
-                          <div className="w-3 h-3 bg-[#2f2d77] rounded-full"></div>
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-1">Business</h4>
-                        <p className="text-sm text-gray-600">
-                          Registered company or organization
-                        </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
-                            KYB/KYM Required
-                          </Badge>
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
-                            Virtual Account Available
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              {/* Verification Type for Business */}
-              {accountType === 'business' && (
-                <div className="space-y-3 p-4 bg-blue-50 border border-blue-200">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Business Verification Type <span className="text-red-500">*</span>
-                  </Label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-3 p-3 bg-white border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
-                      <input
-                        type="radio"
-                        name="verification-type"
-                        value="kyb"
-                        defaultChecked
-                        className="w-4 h-4 text-[#2f2d77] border-gray-300 focus:ring-[#2f2d77]"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">KYB - Know Your Business</p>
-                        <p className="text-xs text-gray-600">Standard business verification for registered companies</p>
-                      </div>
-                    </label>
-                    <label className="flex items-center gap-3 p-3 bg-white border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
-                      <input
-                        type="radio"
-                        name="verification-type"
-                        value="kym"
-                        className="w-4 h-4 text-[#2f2d77] border-gray-300 focus:ring-[#2f2d77]"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">KYM - Know Your Merchant</p>
-                        <p className="text-xs text-gray-600">Enhanced verification for merchant/payment processor accounts</p>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* Virtual Account Option */}
-              {accountType === 'business' && (
-                <div className="space-y-3 p-4 border-2 border-dashed border-gray-300">
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="virtual-account"
-                      checked={wantsVirtualAccount}
-                      onChange={(e) => setWantsVirtualAccount(e.target.checked)}
-                      className="w-4 h-4 mt-1 text-[#2f2d77] border-gray-300 focus:ring-[#2f2d77]"
-                    />
-                    <div className="flex-1">
-                      <Label htmlFor="virtual-account" className="text-sm font-medium text-gray-900 cursor-pointer">
-                        Enable Virtual Account (VA)
-                      </Label>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Get a dedicated virtual account number for automated payment reconciliation
-                      </p>
-                      {wantsVirtualAccount && (
-                        <div className="mt-4 p-4 bg-amber-50 border border-amber-200 space-y-3">
-                          <div className="flex items-start gap-2">
-                            <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <p className="text-sm font-medium text-gray-900 mb-2">
-                                Corporate Email Verification Required
-                              </p>
-                              <p className="text-sm text-gray-700 mb-3">
-                                Virtual Account requires verification of your company's official email domain
-                              </p>
-                              {!corporateEmailVerified ? (
-                                <Button
-                                  size="sm"
-                                  className="bg-[#2f2d77] hover:bg-[#252351] text-white h-9"
-                                  onClick={() => {
-                                    // Simulate verification
-                                    alert('Verification email sent! Please check your inbox.');
-                                    setCorporateEmailVerified(true);
-                                  }}
-                                >
-                                  Verify Corporate Email
-                                </Button>
-                              ) : (
-                                <div className="flex items-center gap-2 text-green-700">
-                                  <CheckCircle2 className="h-4 w-4" />
-                                  <span className="text-sm font-medium">Corporate email verified</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Basic Information */}
           <Card className="border border-gray-200">
             <CardHeader className="border-b border-gray-200 bg-gray-50 py-4">
@@ -782,143 +447,6 @@ export default function CompanyProfile() {
             <Button className="bg-[#2f2d77] hover:bg-[#252351] text-white px-6 h-10">
               <Save className="h-4 w-4 mr-2" />
               Save Company Profile
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'kyc' && (
-        <div className="space-y-6">
-          {/* Required Documents */}
-          <Card className="border border-gray-200">
-            <CardHeader className="border-b border-gray-200 bg-gray-50 py-4">
-              <CardTitle className="text-base font-semibold text-gray-900">KYC Documents</CardTitle>
-              <p className="text-sm text-gray-600 mt-1">
-                Upload the following documents to complete your KYC verification. All documents should be clear, recent, and officially certified.
-              </p>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {kycStatus.documents.map((doc) => {
-                  const statusConfig = getStatusConfig(doc.status);
-                  const StatusIcon = statusConfig.icon;
-                  
-                  return (
-                    <div key={doc.id} className="p-5 border border-gray-200 hover:border-gray-300 transition-colors">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-4 flex-1">
-                          <div className={`w-10 h-10 ${statusConfig.className} flex items-center justify-center flex-shrink-0`}>
-                            <StatusIcon className={`h-5 w-5 ${statusConfig.iconColor}`} />
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-1">
-                              <h4 className="font-medium text-gray-900">{doc.name}</h4>
-                              <Badge variant="outline" className={`${statusConfig.className} text-xs`}>
-                                {statusConfig.label}
-                              </Badge>
-                            </div>
-                            
-                            {doc.uploadedDate && (
-                              <p className="text-sm text-gray-600">
-                                Uploaded: {doc.uploadedDate} • Size: {doc.size}
-                              </p>
-                            )}
-                            
-                            {doc.status === 'rejected' && doc.rejectionReason && (
-                              <div className="mt-3 p-3 bg-red-50 border border-red-200">
-                                <p className="text-sm text-red-700">
-                                  <span className="font-medium">Rejection Reason:</span> {doc.rejectionReason}
-                                </p>
-                              </div>
-                            )}
-                            
-                            {doc.status === 'pending' && (
-                              <p className="text-sm text-gray-500 mt-1">
-                                Required document - Please upload to continue verification
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          {doc.status === 'pending' || doc.status === 'rejected' ? (
-                            <label className="cursor-pointer">
-                              <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png" />
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-gray-300 hover:bg-gray-50 h-9 pointer-events-none"
-                              >
-                                <Upload className="h-4 w-4 mr-1" />
-                                Upload
-                              </Button>
-                            </label>
-                          ) : (
-                            <>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="hover:bg-gray-100 h-9 w-9 p-0"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="hover:bg-gray-100 h-9 w-9 p-0"
-                              >
-                                <Download className="h-4 w-4" />
-                              </Button>
-                              {doc.status !== 'approved' && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-red-600 hover:bg-red-50 h-9 w-9 p-0"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Upload Guidelines */}
-          <Card className="border border-blue-200 bg-blue-50">
-            <CardContent className="p-5">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <FileText className="h-5 w-5 text-blue-600" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Document Guidelines</h4>
-                  <ul className="text-sm text-gray-700 space-y-1">
-                    <li>• Documents must be in PDF, JPG, or PNG format</li>
-                    <li>• Maximum file size: 10MB per document</li>
-                    <li>• Documents should be clear and readable</li>
-                    <li>• All documents must be current and not expired</li>
-                    <li>• Official stamps and signatures must be visible</li>
-                    <li>• Processing time: 2-3 business days after submission</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Submit for Review */}
-          <div className="flex justify-end gap-3">
-            <Button variant="outline" className="border-gray-300 hover:bg-gray-50 h-10 px-6">
-              Save as Draft
-            </Button>
-            <Button className="bg-[#2f2d77] hover:bg-[#252351] text-white h-10 px-6">
-              Submit for Review
             </Button>
           </div>
         </div>
@@ -1266,27 +794,6 @@ export default function CompanyProfile() {
                         readOnly
                       />
                     </div>
-
-                    {wantsVirtualAccount && corporateEmailVerified && (
-                      <div className="md:col-span-2 p-4 bg-green-50 border border-green-200">
-                        <div className="flex items-start gap-3">
-                          <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                          <div>
-                            <p className="text-sm font-medium text-gray-900 mb-1">
-                              Virtual Account Enabled
-                            </p>
-                            <div className="space-y-1">
-                              <p className="text-sm text-gray-700">
-                                VA Number: <span className="font-mono font-medium">88001234567890</span>
-                              </p>
-                              <p className="text-xs text-gray-600">
-                                Use this virtual account number for automated payment reconciliation
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 ) : (
                   <div className="text-center py-8">
@@ -1318,10 +825,6 @@ export default function CompanyProfile() {
                 <li className="flex items-start gap-2">
                   <span className="text-[#2f2d77] font-bold">•</span>
                   <span>Each branch should have a dedicated bank account for better financial tracking</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#2f2d77] font-bold">•</span>
-                  <span>Virtual Account (VA) is only available for verified business accounts with corporate email</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#2f2d77] font-bold">•</span>

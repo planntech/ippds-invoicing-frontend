@@ -5,9 +5,9 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import DashboardPage from './pages/main-phase1/DashboardPage';
 
 // External Payment Pages (No auth required)
-import CustomerPaymentPage from './pages/main-phase3/PaymentGateway/CustomerPaymentPage';
-import PaymentExpiredPage from './pages/main-phase3/PaymentGateway/PaymentExpiredPage';
-import PaymentAlreadyPaidPage from './pages/main-phase3/PaymentGateway/PaymentAlreadyPaidPage';
+import CustomerPaymentPage from './pages/main-phase2.2/PaymentGateway/CustomerPaymentPage';
+import PaymentExpiredPage from './pages/main-phase2.2/PaymentGateway/PaymentExpiredPage';
+import PaymentAlreadyPaidPage from './pages/main-phase2.2/PaymentGateway/PaymentAlreadyPaidPage';
 
 function App() {
   return (
