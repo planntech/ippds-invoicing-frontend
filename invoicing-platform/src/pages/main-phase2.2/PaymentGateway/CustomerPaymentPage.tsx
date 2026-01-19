@@ -50,7 +50,7 @@ export default function CustomerPaymentPage() {
           customer: 'Acme Corporation',
           amount: 535000,
           currency: 'THB',
-          expiresAt: '2026-01-12 23:59',
+          expiresAt: '2026-01-31 23:59',
           description: 'API Integration Service, Custom Development',
           allowedMethods: ['thai_qr', 'ktc_card'],
           status: 'pending', // pending, paid, expired

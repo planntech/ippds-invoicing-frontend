@@ -31,7 +31,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage children={undefined} />} />
         
         {/* External Payment Links (public - no auth required) */}
-        <Route path="/pay/xyz789ghi012" element={<CustomerPaymentPage />} />
+        <Route path="/pay/:linkToken" element={<CustomerPaymentPage />} />
         <Route path="/pay/expired" element={<PaymentExpiredPage />} />
         <Route path="/pay/completed" element={<PaymentAlreadyPaidPage />} />
         
