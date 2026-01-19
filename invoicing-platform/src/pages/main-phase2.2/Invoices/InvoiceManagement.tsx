@@ -50,25 +50,6 @@ export default function InvoiceManagement() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterYear, setFilterYear] = useState<number>(2026);
 
-  // Clone invoice handler
-  const handleCloneInvoice = (invoice: any) => {
-    const clonedInvoice = {
-      ...invoice,
-      id: undefined,
-      invoiceNumber: undefined,
-      issueDate: new Date().toISOString().split('T')[0],
-      dueDate: '',
-      status: 'draft',
-      paidAmount: 0,
-      outstanding: invoice.totalAmount,
-      payments: [],
-      customerPO: '',
-    };
-    
-    setEditingInvoice(clonedInvoice);
-    setShowCreateModal(true);
-  };
-
   // Invoice data with multi-currency
   const invoices = [
     {
@@ -572,7 +553,7 @@ export default function InvoiceManagement() {
                   const hasPayments = ['paid', 'partially_paid'].includes(invoice.status);
 
                   return (
-                    <tr key={invoice.id} className="hover:bg-gray-50 transition-colors group">
+                    <tr key={invoice.id} className="hover:bg-gray-50 transition-colors">
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium text-[#2f2d77]">
@@ -638,7 +619,7 @@ export default function InvoiceManagement() {
                         </Badge>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-1">
                           {/* View */}
                           <Button
                             variant="ghost"
@@ -653,8 +634,8 @@ export default function InvoiceManagement() {
                             <Eye className="h-4 w-4 text-gray-600" />
                           </Button>
 
-                          {/* Edit - disabled if has payments */}
-                          {!hasPayments && (
+                          {/* Edit - disabled if paid or partially paid */}
+                          {!hasPayments ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -667,26 +648,20 @@ export default function InvoiceManagement() {
                             >
                               <Edit className="h-4 w-4 text-gray-600" />
                             </Button>
-                          )}
-
-                          {/* Record Payment - only for unpaid/partially paid/overdue */}
-                          {['sent', 'partially_paid', 'overdue'].includes(invoice.status) && (
+                          ) : (
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-8 w-8 p-0 hover:bg-green-50"
-                              onClick={() => {
-                                setSelectedInvoice(invoice);
-                                setShowPaymentModal(true);
-                              }}
-                              title="Record Payment"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Cannot edit paid/partially paid invoice"
                             >
-                              <CreditCard className="h-4 w-4 text-green-600" />
+                              <Edit className="h-4 w-4 text-gray-400" />
                             </Button>
                           )}
 
-                          {/* Credit Note */}
-                          {invoice.status === 'paid' && (
+                          {/* Credit Note - only for paid invoices */}
+                          {invoice.status === 'paid' ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -699,10 +674,20 @@ export default function InvoiceManagement() {
                             >
                               <FileCheck className="h-4 w-4 text-purple-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Credit note only available for paid invoices"
+                            >
+                              <FileCheck className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Send/Resend Email */}
-                          {['draft', 'sent'].includes(invoice.status) && (
+                          {/* Send/Resend Email - only for draft and sent */}
+                          {['draft', 'sent'].includes(invoice.status) ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -715,21 +700,20 @@ export default function InvoiceManagement() {
                             >
                               <Mail className="h-4 w-4 text-blue-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Send only available for draft/sent invoices"
+                            >
+                              <Mail className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Clone */}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 hover:bg-blue-50"
-                            onClick={() => handleCloneInvoice(invoice)}
-                            title="Clone Invoice"
-                          >
-                            <Copy className="h-4 w-4 text-blue-600" />
-                          </Button>
-
-                          {/* Delete - disabled if has payments */}
-                          {!hasPayments && (
+                          {/* Delete - disabled if paid or partially paid */}
+                          {!hasPayments ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -737,6 +721,16 @@ export default function InvoiceManagement() {
                               title="Delete Invoice"
                             >
                               <Trash2 className="h-4 w-4 text-red-600" />
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Cannot delete paid/partially paid invoice"
+                            >
+                              <Trash2 className="h-4 w-4 text-gray-400" />
                             </Button>
                           )}
                         </div>
@@ -786,8 +780,7 @@ export default function InvoiceManagement() {
         }}
         invoice={selectedInvoice}
         onSent={() => {
-          setShowSendModal(false);
-          setSelectedInvoice(null);
+          // Don't close immediately - modal handles its own state
           // Refresh invoice list and update status
         }}
       />
@@ -830,5 +823,3 @@ export default function InvoiceManagement() {
     </div>
   );
 }
-
-

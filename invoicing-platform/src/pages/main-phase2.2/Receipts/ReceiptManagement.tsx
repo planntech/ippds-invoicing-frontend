@@ -415,52 +415,52 @@ export default function ReceiptManagement() {
                         </Badge>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          {/* View */}
-                          <Button
+                        <div className="flex items-center justify-end gap-1">
+                            {/* View */}
+                            <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-gray-100"
                             onClick={() => {
-                              setSelectedReceipt(receipt);
-                              setShowPreviewModal(true);
+                                setSelectedReceipt(receipt);
+                                setShowPreviewModal(true);
                             }}
                             title="View Receipt"
-                          >
+                            >
                             <Eye className="h-4 w-4 text-gray-600" />
-                          </Button>
+                            </Button>
 
-                          {/* Download PDF */}
-                          <Button
+                            {/* Download PDF */}
+                            <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-blue-50"
                             title="Download PDF"
-                          >
+                            >
                             <Download className="h-4 w-4 text-blue-600" />
-                          </Button>
+                            </Button>
 
-                          {/* Print */}
-                          <Button
+                            {/* Print */}
+                            <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-gray-100"
                             title="Print Receipt"
-                          >
+                            >
                             <Printer className="h-4 w-4 text-gray-600" />
-                          </Button>
+                            </Button>
 
-                          {/* Send/Resend Email */}
-                          <Button
+                            {/* Send/Resend Email */}
+                            <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-green-50"
                             title={receipt.status === 'sent' ? 'Resend Email' : 'Send Email'}
-                          >
+                            >
                             <Mail className="h-4 w-4 text-green-600" />
-                          </Button>
+                            </Button>
                         </div>
-                      </td>
+                        </td>
                     </tr>
                   );
                 })}

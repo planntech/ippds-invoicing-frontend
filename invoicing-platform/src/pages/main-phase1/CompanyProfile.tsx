@@ -749,13 +749,28 @@ export default function CompanyProfile() {
                           </Badge>
                         </td>
                         <td className="py-3 px-4">
-                          <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+                          <div className="flex items-center justify-end gap-1">
+                            {/* View Branch */}
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
+                              title="View Branch Details"
+                            >
                               <Eye className="h-4 w-4 text-gray-600" />
                             </Button>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+
+                            {/* Edit Branch */}
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
+                              title="Edit Branch"
+                            >
                               <Edit className="h-4 w-4 text-gray-600" />
                             </Button>
+
+                            {/* Activate/Deactivate Branch */}
                             <Button
                               variant="ghost"
                               size="sm"
@@ -764,6 +779,7 @@ export default function CompanyProfile() {
                                   ? 'hover:bg-red-50'
                                   : 'hover:bg-green-50'
                               }`}
+                              title={branch.status === 'active' ? 'Deactivate Branch' : 'Activate Branch'}
                             >
                               <Power
                                 className={`h-4 w-4 ${

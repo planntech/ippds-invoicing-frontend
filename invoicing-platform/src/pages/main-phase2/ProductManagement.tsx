@@ -529,33 +529,48 @@ export default function ProductManagement() {
                               {statusConfig.label}
                             </Badge>
                           </td>
-                          <td className="py-3 px-4">
-                            <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
-                                <Eye className="h-4 w-4 text-gray-600" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 p-0 hover:bg-gray-100"
-                                onClick={() => {
-                                  setSelectedProduct(product);
-                                  setShowPricingModal(true);
-                                }}
-                              >
-                                <DollarSign className="h-4 w-4 text-gray-600" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 p-0 hover:bg-gray-100"
-                                onClick={() => {
-                                  setSelectedProduct(product);
-                                  setShowEditModal(true);
-                                }}
-                              >
-                                <Edit className="h-4 w-4 text-gray-600" />
-                              </Button>
+                         <td className="py-3 px-4">
+                          <div className="flex items-center justify-end gap-1">
+                            {/* View Button */}
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
+                              title="View Product"
+                            >
+                              <Eye className="h-4 w-4 text-gray-600" />
+                            </Button>
+
+                            {/* Pricing History Button */}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
+                              onClick={() => {
+                                setSelectedProduct(product);
+                                setShowPricingModal(true);
+                              }}
+                              title="Pricing History"
+                            >
+                              <DollarSign className="h-4 w-4 text-gray-600" />
+                            </Button>
+
+                            {/* Edit Button */}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 hover:bg-gray-100"
+                              onClick={() => {
+                                setSelectedProduct(product);
+                                setShowEditModal(true);
+                              }}
+                              title="Edit Product"
+                            >
+                              <Edit className="h-4 w-4 text-gray-600" />
+                            </Button>
+
+                            {/* Delete Button - Disabled for active products */}
+                            {product.status === 'inactive' ? (
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -564,11 +579,23 @@ export default function ProductManagement() {
                                   setSelectedProduct(product);
                                   setShowDeleteModal(true);
                                 }}
+                                title="Delete Product"
                               >
                                 <Trash2 className="h-4 w-4 text-red-600" />
                               </Button>
-                            </div>
-                          </td>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                                disabled
+                                title="Can only delete inactive products"
+                              >
+                                <Trash2 className="h-4 w-4 text-gray-400" />
+                              </Button>
+                            )}
+                          </div>
+                        </td>
                         </tr>
                       );
                     })}
@@ -675,11 +702,24 @@ export default function ProductManagement() {
                             </div>
                           </td>
                           <td className="py-3 px-4">
-                            <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+                            <div className="flex items-center justify-end gap-1">
+                              {/* Edit Button */}
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0 hover:bg-gray-100"
+                                title="Edit Pricing Rule"
+                              >
                                 <Edit className="h-4 w-4 text-gray-600" />
                               </Button>
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-red-50">
+
+                              {/* Delete Button */}
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0 hover:bg-red-50"
+                                title="Delete Pricing Rule"
+                              >
                                 <Trash2 className="h-4 w-4 text-red-600" />
                               </Button>
                             </div>

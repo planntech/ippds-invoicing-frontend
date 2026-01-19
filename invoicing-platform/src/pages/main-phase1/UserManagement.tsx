@@ -512,27 +512,73 @@ export default function UserManagement() {
                             </div>
                           </td>
                           <td className="py-3 px-4">
-                            <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100" onClick={() => {
-                                setSelectedUser(user);
-                                setShowUserDetailsModal(true);
-                              }}>
+                            <div className="flex items-center justify-end gap-1">
+                              {/* View User Details */}
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0 hover:bg-gray-100" 
+                                onClick={() => {
+                                  setSelectedUser(user);
+                                  setShowUserDetailsModal(true);
+                                }}
+                                title="View User Details"
+                              >
                                 <Eye className="h-4 w-4 text-gray-600" />
                               </Button>
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+
+                              {/* Edit User */}
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 w-8 p-0 hover:bg-gray-100"
+                                title="Edit User"
+                              >
                                 <Edit className="h-4 w-4 text-gray-600" />
                               </Button>
-                              {user.role !== 'owner' && (
-                                <>
-                                  {user.status === 'invited' && (
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-blue-50">
-                                      <Mail className="h-4 w-4 text-blue-600" />
-                                    </Button>
-                                  )}
-                                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-red-50">
-                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                  </Button>
-                                </>
+
+                              {/* Resend Invitation - Only for invited users */}
+                              {user.status === 'invited' ? (
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 w-8 p-0 hover:bg-blue-50"
+                                  title="Resend Invitation"
+                                >
+                                  <Mail className="h-4 w-4 text-blue-600" />
+                                </Button>
+                              ) : (
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                                  disabled
+                                  title="User already active"
+                                >
+                                  <Mail className="h-4 w-4 text-gray-400" />
+                                </Button>
+                              )}
+
+                              {/* Delete User - Cannot delete owner */}
+                              {user.role !== 'owner' ? (
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 w-8 p-0 hover:bg-red-50"
+                                  title="Remove User"
+                                >
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              ) : (
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                                  disabled
+                                  title="Cannot remove owner"
+                                >
+                                  <Trash2 className="h-4 w-4 text-gray-400" />
+                                </Button>
                               )}
                             </div>
                           </td>

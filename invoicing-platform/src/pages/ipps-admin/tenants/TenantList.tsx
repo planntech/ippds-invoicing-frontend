@@ -294,25 +294,33 @@ export default function TenantList() {
                         <p className="text-sm text-gray-600">{tenant.registeredDate}</p>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-1">
+                          {/* View */}
                           <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-gray-100"
+                            title="View Details"
                           >
                             <Eye className="h-4 w-4 text-gray-600" />
                           </Button>
+
+                          {/* Edit */}
                           <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-gray-100"
+                            title="Edit"
                           >
                             <Edit className="h-4 w-4 text-gray-600" />
                           </Button>
+
+                          {/* More Actions */}
                           <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-gray-100"
+                            title="More Actions"
                           >
                             <MoreVertical className="h-4 w-4 text-gray-600" />
                           </Button>

@@ -452,7 +452,7 @@ export default function QuotationManagement() {
                         </Badge>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-1">
                           {/* View Button - Always visible */}
                           <Button
                             variant="ghost"
@@ -467,8 +467,8 @@ export default function QuotationManagement() {
                             <Eye className="h-4 w-4 text-gray-600" />
                           </Button>
                           
-                          {/* Edit Button - Not for accepted/rejected/expired */}
-                          {!['accepted', 'rejected', 'expired'].includes(quotation.status) && (
+                          {/* Edit Button - Disabled for accepted/rejected/expired */}
+                          {!['accepted', 'rejected', 'expired'].includes(quotation.status) ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -481,10 +481,20 @@ export default function QuotationManagement() {
                             >
                               <Edit className="h-4 w-4 text-gray-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Cannot edit accepted/rejected/expired quotation"
+                            >
+                              <Edit className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
                           {/* Version History Button */}
-                          {quotation.version > 1 && (
+                          {quotation.version > 1 ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -497,10 +507,20 @@ export default function QuotationManagement() {
                             >
                               <History className="h-4 w-4 text-purple-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="No version history"
+                            >
+                              <History className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Approval Workflow Button - For draft/pending approval */}
-                          {quotation.approvalStatus === 'pending' && (
+                          {/* Approval Workflow Button */}
+                          {quotation.approvalStatus === 'pending' ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -513,10 +533,20 @@ export default function QuotationManagement() {
                             >
                               <CheckSquare className="h-4 w-4 text-amber-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="No pending approval"
+                            >
+                              <CheckSquare className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Convert to Invoice Button - Only for accepted */}
-                          {quotation.status === 'accepted' && (
+                          {/* Convert to Invoice Button */}
+                          {quotation.status === 'accepted' ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -529,10 +559,20 @@ export default function QuotationManagement() {
                             >
                               <FileText className="h-4 w-4 text-blue-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Only accepted quotations can be converted"
+                            >
+                              <FileText className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Milestone Button - Only for accepted */}
-                          {quotation.status === 'accepted' && (
+                          {/* Milestone Button */}
+                          {quotation.status === 'accepted' ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -545,10 +585,20 @@ export default function QuotationManagement() {
                             >
                               <Split className="h-4 w-4 text-purple-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Only accepted quotations can have milestones"
+                            >
+                              <Split className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Customer Signature Button - Only for sent and not yet accepted */}
-                          {quotation.status === 'sent' && !quotation.customerAccepted && (
+                          {/* Customer Signature Button */}
+                          {quotation.status === 'sent' && !quotation.customerAccepted ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -561,10 +611,20 @@ export default function QuotationManagement() {
                             >
                               <FileSignature className="h-4 w-4 text-green-600" />
                             </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Not available for customer signature"
+                            >
+                              <FileSignature className="h-4 w-4 text-gray-400" />
+                            </Button>
                           )}
 
-                          {/* Delete Button - Not for accepted */}
-                          {quotation.status !== 'accepted' && (
+                          {/* Delete Button - Only for draft and pending approval */}
+                          {['draft', 'pending'].includes(quotation.approvalStatus) ? (
                             <Button
                               variant="ghost"
                               size="sm"
@@ -576,6 +636,16 @@ export default function QuotationManagement() {
                               title="Delete Quotation"
                             >
                               <Trash2 className="h-4 w-4 text-red-600" />
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 cursor-not-allowed opacity-40"
+                              disabled
+                              title="Can only delete draft or pending approval quotations"
+                            >
+                              <Trash2 className="h-4 w-4 text-gray-400" />
                             </Button>
                           )}
                         </div>
